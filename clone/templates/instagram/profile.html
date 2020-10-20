@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static custom_tags %}
+{% block content %}
+<style>
+img {
+  display: block;
+}
+.picture-circle{
+    height: 170px;
+    width: 170px;
+}
+
+</style>
+
+
+<header>
+
+	<div class="container m-0 p-o">
+
+		<div class="profile">
+
+			<div class="profile-image">
+				{% if profile.profile_path %}
+				<img class="picture-circle" src="{{ profile.profile_path.url }}" alt="">
+				{% else %}
+                <img class="picture-circle" src="{% static 'images/profile_placeholder.jpg' %}">
+              {% endif %}
+			</div>
+
+			<div class="profile-user-settings">
+
+				<h1 class="profile-user-name">{{ user.username }}</h1>
+				{% if request.user == user %}
+
+				<a href="{% url 'profile'  %}"><button class="btn profile-edit-btn">Edit Profile</button>
+				</a> 
+				<a href="{% url 'post-create'  %}"><button class="btn profile-edit-btn">Share Post</button>
+				</a> 
+				<button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+
+			</div>
+			{% elif request.user.is_authenticated %}
+			<div class="follow-toggle__container">
+			  {% is_following request.user.profile profile as following %}
+			  <button class="btn btn-primary {% if not following %}follow-user{% else %}unfollow-user{% endif %}" id="{{ profile.pk }}">
+				{% if not following %}
+				  Follow
+				{% else %}
+				  Following
+				{% endif %}
+			  </button>   {% endif %}
+			<div class="profile-stats">
+
+				<ul>
+					<li><span class="profile-stat-count">{{ profile.image_set.count }}</span> posts</li>
+					<li><span class="profile-stat-count">{{ profile.get_number_of_followers }}</span> followers</li>
+					<li><span class="profile-stat-count">{{ profile.get_number_of_following }}</span> following</li>
+				</ul>
+
+			</div>
+
+			<div class="profile-bio">
+
+				<p><span class="profile-real-name">{{ user.username }}</span>{% if profile.bio %}{{ profile.bio }}{% endif %}</p>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</header>
+
+<main>
+
+	<div class="container">
+
+		<div class="gallery">
+            {% for post in profile.image_set.all %}
+
+			<div class="gallery-item" tabindex="0">
+                
+				<img src="{{ post.image.url }}" data-toggle="modal" data-target="#exampleModalCenter" class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 56</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ post.image.comments.count }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    
+                          <li class="gallery-item-likes"><span class="visually-hidden"></span><i class="fas fa-eye"  data-toggle="modal" data-target="#exampleModalCenter{{post.id}}" aria-hidden="true"></i> </li>
+
+                    </ul>
+
+				</div>
+
+			</div>
+            {% endfor %}
+            
+            {% for post in profile.image_set.all %}
+
+            <div class="modal fade" id="exampleModalCenter{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">{{post.title}}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ post.image.url }}" data-toggle="modal" data-target="#exampleModalCenter" class="gallery-image" alt="">
+
+                    </div>
+                    <div class="modal-footer">
+                        <h3>{{post.caption}}</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+		</div>
+
+	</div>
+</main>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+<header>
+        <div class="profile">
+      
+          <div class="profile-image">
+              {% if profile.profile_path %}
+                <img class="picture-circle" src="{{ profile.profile_path.url }}">
+              {% else %}
+                <img class="picture-circle" src="{% static 'images/profile_placeholder.jpg' %}">
+              {% endif %}
+      
+          </div>
+      
+          <div class="profile-user-settings">
+      
+            <h1 class="profile-user-name">{{ user.username }}</h1>
+            {% if request.user == user %}
+      
+            <a class="edit-desktop" href="{% url 'profile_settings' user.username %}">
+              <button class="btn profile-edit-btn">Edit Profile</button>
+            </a>
+      
+            <button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+            <div class="options-bubbles" type="button" data-toggle="modal" data-target="#logoutModal">
+              <p class="bubble"></p>
+              <p class="bubble"></p>
+              <p class="bubble"></p>
+            </div>
+          {% elif request.user.is_authenticated %}
+          <div class="follow-toggle__container">
+            {% is_following request.user.profile profile as following %}
+            <button class="btn btn-primary {% if not following %}follow-user{% else %}unfollow-user{% endif %}" id="{{ profile.pk }}">
+              {% if not following %}
+                Follow
+              {% else %}
+                Following
+              {% endif %}
+            </button>   {% endif %}
+          </div>
+          </div>
+      
+          <div class="profile-stats">
+      
+            <ul>
+              <li><span class="profile-stat-count">{{ profile.image_set.count }}</span> posts</li>
+              <li><span class="profile-stat-count">{{ profile.get_number_of_followers }}</span> followers</li>
+              <li><span class="profile-stat-count">{{ profile.get_number_of_following }}</span> following</li>
+            </ul>
+      
+          </div>
+      
+          <div class="profile-bio">
+      
+            <p><span class="profile-real-name">{{ user.username }}</span>{% if profile.bio %}{{ profile.bio }}{% endif %}</p>
+      
+          </div>
+      
+</header>
+    <main>
+
+      <div class="container">
+    
+        <div class="gallery">
+            {% for post in profile.image_set.all %}
+
+    
+          <div class="gallery-item" tabindex="0">
+            <button type="button" data-toggle="modal" data-target="#exampleModalCenter">
+                <img src="{{ post.image.url }}" class="gallery-image" alt="">
+            </button>
+    
+            <div class="gallery-item-info">
+    
+              <ul>
+                <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 56</li>
+                <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> {{ post.image.comments.count }}</li>
+
+                  
+            </ul>
+    
+            </div>
+            
+    
+          </div>
+          {% endfor %}
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            Launch demo modal
+          </button>  km,./
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  ...
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  <button type="button" class="btn btn-primary">Save changes</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+        </div>    
+      </div>
+    </main>

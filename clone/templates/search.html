@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static custom_tags %}
+
+{% block content %}
+<style>
+  .picture-circle, .picture-circle--medium, .picture-circle--small {
+    border-radius: 100%;
+    width: 150px;
+    height: 150px; }
+    .picture-circle--medium {
+      width: 136px;
+      height: 136px; }
+      .username{
+          display: flex;
+      }
+   </style>
+{% for usr in searched_user %}
+<div class="row profile-settings">
+  <div class="col-xs-12">
+    <div class="profile-pic-name">
+        <img class="picture-circle--medium" src="{{ usr.profile_path.url }}">
+        
+        <span class="username">Username:<a href="/instagram/prof/{{usr.user.username}}"> {{usr.}}{{ usr.user.username }}</a> </span>
+      <span class="username">Bio: {{ usr.bio }}</span>
+    </div>
+  
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

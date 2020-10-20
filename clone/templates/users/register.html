@@ -1,0 +1,89 @@
+{%extends "base.html"%} {% load bootstrap3 %}
+ {%load static%}
+{% block content %}
+      {% if form.errors %}
+        <p>Clone of Instagram</p>
+      {% endif %}
+
+<div class="container">
+
+<div class="row">
+
+
+  <div class="col-md-6">
+  <div>
+      <img class="thumbnail" src="{% static 'https://unsplash.com/photos/_XFObcM_7KU' %}" style="height:400px;width:450px;">
+  </div>
+</div>
+  <div class="col-md-6">
+
+    <img class="container__img"src="https://trello-attachments.s3.amazonaws.com/5a394d663fc5c0942f85f37c/5a82fd5dc4d760e847b6589a/eba48aa1d9fa53ddfacf75bd2c9853a6/500px-_logo.svg.png" alt="">
+    <div class="container__fblogin">
+      <button><i class="fa fa-facebook-square" style="color: white; font-size: 14px;"></i> Log in with Facebook</button>
+    </div>
+    <!-- <p class="container__or">OR</p> -->
+
+    <form class="container__form" action="/" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-sm" value="Sign Up">Sign Up</button>
+      </div>
+
+      <input type="hidden" name="next" value="{{next}}">
+
+    </form>
+    <p class="container__terms">By signin up, you agree to our <br> <strong>Terms & Privacy Policy.</strong></p>
+
+
+
+  <div class="account">
+      <p>Have an account? <a href="{% url 'login' %}">Log in</a></p>
+    </div>
+     <div id="card" class="card mt-5" style="width: 28rem;">
+        <div class="card-body text-center">
+          <h5 class="card-title">Get the app.</h5>
+        <div  id="app" >
+          <a href="https://itunes.apple.com/ke/app//id389801252?mt=8"><img src="{% static 'photos/appstore.png' %}"
+              style="height:70px;width:200px;"></a>
+          <a href="https://play.google.com/store?hl=en"><img src="{% static 'photos/playstore.png' %}" style="height:70px;width:200px;"></a>
+        </div>
+      </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+    <!-- empty div -->
+    <div class="container">
+        <div class="col-md-6">
+      <div class="footer text-center">
+        <ul id="footer1">
+          <li>ABOUT US</li>
+          <li>SUPPORT</li>
+          <li>PRESS</li>
+          <li>API</li>
+          <li>JOBS</li>
+          <li>PRIVACY</li>
+          <li>TERMS</li>
+          <li>DIRECTORY</li>
+          <li>PROFILES</li>
+          <li>HASHTAGS</li>
+          <li>LANGUAGE</li>
+          <br>
+
+          <li style="font-size:10px;"> <strong>© 2020 LucyGram</strong></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div>
+
+{% endblock %}

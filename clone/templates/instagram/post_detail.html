@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" style="
+            height: 125px;
+            width: 125px;
+            margin-right: 20px;
+            margin-bottom: 16px;
+          " src="{{ object.author.profile.profile_photo.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ object.author }}</a>
+              <small class="text-muted">{{ object.time_created|date:"F d, Y" }}</small>
+            </div>
+
+            <p class="article-content">{{ object.caption }}</p>
+          </div>
+        </article>
+{% endblock content %}
